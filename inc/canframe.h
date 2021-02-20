@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "can_exceptions.hpp"
+#include "can_exceptions.h"
 
 #ifdef WIN32
 #include "candle.h"
