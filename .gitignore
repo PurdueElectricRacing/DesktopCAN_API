@@ -8,3 +8,4 @@ can_examples
 .vs
 build*
 bin
+Makefile
