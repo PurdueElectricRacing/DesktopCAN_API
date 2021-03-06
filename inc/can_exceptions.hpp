@@ -5,6 +5,14 @@
 #include <exception>
 #include <string>
 
+class CanNullException : public std::exception
+{
+  virtual const char *what() const throw()
+  {
+    return "There is no CAN device connected.\n";
+  }
+} static CanNullException;
+
 // likely going to add a bunch of exceptions here
 class CanSocketException : public std::exception
 {
