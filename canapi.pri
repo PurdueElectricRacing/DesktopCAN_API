@@ -36,7 +36,7 @@ win32:INCLUDEPATH += $$PWD/candle ./inc
 
 unix:INCLUDEPATH += $$PWD/socketcan
 
-unix:HEADERS += socketcan_if.h
+unix:HEADERS += $$PWD/socketcan/socketcan_if.h
 
 
 unix:SOURCES += $$PWD/socketcan/socketcan_if.cpp

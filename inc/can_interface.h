@@ -10,7 +10,7 @@
 
 // user includes here
 #include "canframe.h"
-#include "can_exceptions.hpp"
+#include "can_exceptions.h"
 
 
 enum CanIfType 
