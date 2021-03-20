@@ -32,7 +32,7 @@ win32:HEADERS += \
     $$PWD/inc/can_api.h  \
 
 
-win32:INCLUDEPATH += $$PWD/candle/inc
+win32:INCLUDEPATH += $$PWD/candle
 
 unix:INCLUDEPATH += $$PWD/socketcan
 
