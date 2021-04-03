@@ -15,7 +15,7 @@ struct CanFrame
 {
   CanFrame()
   {
-    can_id = 0;
+    can_id = 0xFFFF;
     can_dlc = 0;
     padding = 0;
     reserve0 = 0;
@@ -36,6 +36,7 @@ struct CanFrame
   uint8_t data[8];
   uint32_t timestamp_us;
   
+  bool validFrame() { return can_id == 0xFFFF; };
 
 #ifdef WIN32
   CanFrame &operator=(const candle_frame_t f);
