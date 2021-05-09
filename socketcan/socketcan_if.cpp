@@ -85,7 +85,7 @@ void SocketCanDevice::Open(uint8_t, uint32_t)
 ///        for info on the socketCAN api
 ///
 /// @return: number of bytes written, or -1 on error
-int16_t SocketCanDevice::writeCanData(uint16_t id, uint8_t dlc, uint8_t *data)
+int16_t SocketCanDevice::writeCanData(uint32_t id, uint8_t dlc, uint8_t *data)
 {
   can_frame frame;
   int16_t bytes = 0;
@@ -134,9 +134,7 @@ CanFrame SocketCanDevice::readCanData()
   {
     errno = 0;
     
-    read_mtx.lock();
     nbytes = read(can_socket_fd, &frame, sizeof(struct can_frame));
-    read_mtx.unlock();
 
     if (nbytes < 0)
     {

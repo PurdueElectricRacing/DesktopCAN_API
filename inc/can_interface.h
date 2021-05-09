@@ -29,7 +29,7 @@ public:
   virtual ~CanInterface() {};
 
   virtual CanFrame readCanData() { return CanFrame(); };
-  virtual int16_t writeCanData(uint16_t id, uint8_t dlc, uint8_t * data) {return dlc;};
+  virtual int16_t writeCanData(uint32_t id, uint8_t dlc, uint8_t * data) {return dlc;};
 
   virtual CanIfType interfaceType() { return generic_can; };
   
@@ -45,9 +45,6 @@ public:
   virtual void Open(uint8_t dev_idex=0, uint32_t baud_rate=500000) {};
   virtual void Close() {};
 
-protected:
-  std::mutex read_mtx;
-  
 };
 
 #endif

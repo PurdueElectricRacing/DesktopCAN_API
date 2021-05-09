@@ -40,7 +40,7 @@ public:
   virtual ~SocketCanDevice() { close(can_socket_fd); };
 
   virtual CanFrame readCanData();
-  virtual int16_t writeCanData(uint16_t id, uint8_t dlc, uint8_t * data);
+  virtual int16_t writeCanData(uint32_t id, uint8_t dlc, uint8_t * data);
   virtual void Open(uint8_t, uint32_t);
   virtual void Close() { close(can_socket_fd); };
   virtual CanIfType interfaceType() { return socket_can; };

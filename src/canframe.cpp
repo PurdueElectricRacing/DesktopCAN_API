@@ -6,6 +6,8 @@
 #endif
 
 
+
+
 /// @brief: Copy constructor
 CanFrame::CanFrame(const CanFrame &frame)
 {

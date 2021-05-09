@@ -35,6 +35,7 @@ public:
   WindowsCandleDev(uint32_t baud_rate = 500000) : baud(baud_rate) {
     devlist = 0;
     getDevices();
+    hdev = 0;
   };
 
   virtual ~WindowsCandleDev() { 
@@ -48,7 +49,7 @@ public:
   virtual void Close();
   virtual void setBaudRate(uint32_t rate);
   virtual CanFrame readCanData();
-  virtual int16_t writeCanData(uint16_t id, uint8_t dlc, uint8_t * data);
+  virtual int16_t writeCanData(uint32_t id, uint8_t dlc, uint8_t * data);
 
 
 

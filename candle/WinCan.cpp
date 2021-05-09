@@ -85,7 +85,6 @@ void WindowsCandleDev::Open(uint8_t dev_idx, uint32_t rate)
     throw CanWindowsOpenException;
   }
 
-
   // attempt to set the baud 
   setBaudRate(rate);
 
@@ -103,11 +102,19 @@ void WindowsCandleDev::Open(uint8_t dev_idx, uint32_t rate)
 /// @return: win_can_close_error if an error was encountered, win_can_no_error on ok
 void WindowsCandleDev::Close()
 {
+
+  if (hdev == 0)
+  {
+      return;
+  }
   // attempt to close the device connection.
-  if (!candle_dev_close(hdev) || !candle_dev_free(hdev))
+  if (!candle_channel_stop(hdev, 0)
+      || !candle_dev_close(hdev)
+      || !candle_dev_free(hdev))
   {
     throw CanWindowsCloseException;
   }
+  hdev = 0;
 }
 
 
@@ -120,6 +127,11 @@ void WindowsCandleDev::setBaudRate(uint32_t rate)
 {
   baud = rate;
   candle_devstate_t state;
+
+  if (hdev == 0)
+  {
+      return;
+  }
 
   if (!candle_dev_get_state(hdev, &state))
   {
@@ -150,9 +162,12 @@ CanFrame WindowsCandleDev::readCanData()
 {
   candle_frame_t frame;
   CanFrame ret;
-  read_mtx.lock();
+
+  if (hdev == 0)
+  {
+    return CanFrame();
+  }
   bool frame_read = candle_frame_read(hdev, &frame, 500);
-  read_mtx.unlock();
   
   // read from the device
   if (frame_read)
@@ -180,15 +195,21 @@ CanFrame WindowsCandleDev::readCanData()
 /// @brief: send a can frame on the bus.
 ///
 /// @return: -1 on error, 0 on success
-int16_t WindowsCandleDev::writeCanData(uint16_t id, uint8_t dlc, uint8_t * data)
+int16_t WindowsCandleDev::writeCanData(uint32_t id, uint8_t dlc, uint8_t * data)
 {
   candle_frame_t frame;
   frame.can_dlc = dlc;
   frame.can_id = id;
+
+  // it's an EXT ID
+  if (id > 0x7FF)
+  {
+    frame.can_id |= EXTENDED_ID_FLAG;
+  }
+
   memcpy(frame.data, data, dlc);
 
- 
-  if (!candle_frame_send(hdev, 0, &frame))
+  if (hdev != 0 && !candle_frame_send(hdev, 0, &frame))
   {
     return -1;
   }
