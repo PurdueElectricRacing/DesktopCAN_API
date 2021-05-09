@@ -21,6 +21,8 @@
 static CanInterface * NewCanDevice(int baud_rate=500000) {
 #ifdef WIN32
   return new WindowsCandleDev(baud_rate);
+#elif STUB_CAN
+  return new CanInterface();
 #else
   return new SocketCanDevice();
 #endif
