@@ -351,7 +351,7 @@ bool __stdcall DLL candle_dev_get_timestamp_us(candle_handle hdev, uint32_t *tim
 bool __stdcall DLL candle_dev_close(candle_handle hdev)
 {
     candle_device_t *dev = (candle_device_t*)hdev;
-
+    printf("closing device %x\n", hdev);
     candle_close_rxurbs(dev);
 
     WinUsb_Free(dev->winUSBHandle);
@@ -366,6 +366,7 @@ bool __stdcall DLL candle_dev_close(candle_handle hdev)
 bool __stdcall DLL candle_dev_free(candle_handle hdev)
 {
     free(hdev);
+    hdev = 0;
     return true;
 }
 
@@ -486,6 +487,11 @@ bool __stdcall DLL candle_frame_send(candle_handle hdev, uint8_t ch, candle_fram
     // TODO ensure device is open, check channel count..
     candle_device_t *dev = (candle_device_t*)hdev;
 
+    if (hdev == 0)
+    {
+        return false;
+    }
+
     unsigned long bytes_sent = 0;
 
     frame->echo_id = 0;
@@ -509,6 +515,11 @@ bool __stdcall DLL candle_frame_read(candle_handle hdev, candle_frame_t *frame, 
 {
     // TODO ensure device is open..
     candle_device_t *dev = (candle_device_t*)hdev;
+
+    if (hdev == 0)
+    {
+        return false;
+    }
 
     DWORD wait_result = WaitForMultipleObjects(CANDLE_URB_COUNT, dev->rxevents, false, timeout_ms);
     if (wait_result == WAIT_TIMEOUT) {

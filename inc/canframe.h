@@ -42,6 +42,14 @@ struct CanFrame
   
   bool validFrame() { return can_id != 0xFFFFFFFF; };
 
+  uint32_t getId() {
+      if (can_id > 0x7FF)
+      {
+        return can_id & ~EXTENDED_ID_FLAG;
+      }
+      return can_id;
+  };
+
 #ifdef WIN32
   CanFrame &operator=(const candle_frame_t f);
 #else
